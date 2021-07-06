@@ -13,6 +13,8 @@ const {
 } = ReactNative;
 const Button = require('./Button');
 
+import { RectButton } from 'react-native-gesture-handler'
+
 const WINDOW_WIDTH = Dimensions.get('window').width;
 
 const ScrollableTabBar = createReactClass({
@@ -125,24 +127,25 @@ const ScrollableTabBar = createReactClass({
   },
 
   renderTab(name, page, isTabActive, onPressHandler, onLayoutHandler) {
-    const { activeTextColor, inactiveTextColor, textStyle, } = this.props;
+    const { activeTextColor, inactiveTextColor, textStyle, onPress } = this.props;
     const textColor = isTabActive ? activeTextColor : inactiveTextColor;
     const fontWeight = isTabActive ? 'bold' : 'normal';
 
-    return <Button
+    return <RectButton
       key={`${name}_${page}`}
       accessible={true}
       accessibilityLabel={name}
       accessibilityTraits='button'
-      onPress={() => onPressHandler(page)}
+      onPress={() => onPressHandler ? onPressHandler(page) : onPress(page)}
       onLayout={onLayoutHandler}
+      style={{ zIndex: 1 }}
     >
       <View style={[styles.tab, this.props.tabStyle, ]}>
         <Text style={[{color: textColor, fontWeight, }, textStyle, ]}>
           {name}
         </Text>
       </View>
-    </Button>;
+    </RectButton>;
   },
 
   measureTab(page, event) {
